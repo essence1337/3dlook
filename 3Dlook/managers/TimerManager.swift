@@ -19,19 +19,19 @@ protocol TimerManagerProtocol: AnyObject {
     func getSeconds() -> Int
 }
 
-protocol TimerManagerDelegate: class {
+protocol TimerManagerDelegate: AnyObject {
     func timeDidChange(seconds: Int)
 }
 
 class TimerManager: TimerManagerProtocol {
+    weak var delegate: TimerManagerDelegate?
+    
     private var timer: Timer?
     private var seconds = 0 {
         didSet {
             delegate?.timeDidChange(seconds: seconds)
         }
     }
-    
-    weak var delegate: TimerManagerDelegate?
     
     public func setDelegate(delegate: TimerManagerDelegate) {
         self.delegate = delegate

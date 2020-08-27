@@ -71,8 +71,28 @@ class MainViewController: UIViewController {
         tableViewPresenter.setDataSource(timers?.array)
         mainView.tableViewReloadData()
     }
+    
+    private func getTimers() {
+        var timers = storeManager.getTimers()
+        if timers != nil {
+            if timers!.isActive {
+                guard let currentTimer = timers?.array.first else { return }
+                timerManager.startFrom(seconds: currentTimer.seconds, run: timers!.isRunning)
+                timers!.array.removeFirst()
+            }
+            self.timers = timers
+            updateTableView()
+        }
+    }
+    
+    private func saveTimers() {
+        if timerManager.isAlive() {
+            appendTimers(isActive: true, isRunning: timerManager.isRunning())
+        }
+        timerManager.stopTimer()
+        storeManager.saveTimers(timers)
+    }
 }
-
 
 extension MainViewController {
     @objc private func timerTapAction() {
@@ -92,24 +112,13 @@ extension MainViewController {
     }
     
     @objc func appMovedToBackground() {
-        if timerManager.isAlive() {
-            appendTimers(isActive: true, isRunning: timerManager.isRunning())
-        }
-        timerManager.stopTimer()
-        storeManager.saveTimers(timers)
+        saveTimers()
+        print("save")
     }
     
     @objc func appMovedToForeground() {
-        var timers = storeManager.getTimers()
-        if timers != nil {
-            if timers!.isActive {
-                guard let currentTimer = timers?.array.first else { return }
-                timerManager.startFrom(seconds: currentTimer.seconds, run: timers!.isRunning)
-                timers!.array.removeFirst()
-                self.timers = timers
-                updateTableView()
-            }
-        }
+        getTimers()
+        print("get")
     }
 }
 
