@@ -113,12 +113,10 @@ extension MainViewController {
     
     @objc func appMovedToBackground() {
         saveTimers()
-        print("save")
     }
     
     @objc func appMovedToForeground() {
         getTimers()
-        print("get")
     }
 }
 
