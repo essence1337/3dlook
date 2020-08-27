@@ -16,8 +16,6 @@ protocol TimerManagerProtocol: AnyObject {
     func toggleTimer()
     func stopTimer()
     func resetTimer()
-    func handleEnterBackground()
-    func handleEnterForeground()
     func getSeconds() -> Int
 }
 
@@ -63,7 +61,7 @@ class TimerManager: TimerManagerProtocol {
         }
     }
     
-    func stopTimer() {
+    public func stopTimer() {
         timer?.invalidate()
     }
     
@@ -72,18 +70,6 @@ class TimerManager: TimerManagerProtocol {
         seconds = 0
     }
     
-    public func handleEnterBackground() {
-    }
-    
-    public func handleEnterForeground() {
-    }
-    
-//    public func getSeconds() -> Int? {
-//        if seconds == 0 {
-//            return nil
-//        }
-//        return seconds
-//    }
     public func getSeconds() -> Int {
         return seconds
     }

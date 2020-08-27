@@ -82,17 +82,10 @@ extension MainViewController {
     @objc private func timerDoubleTapAction() {
         if timerManager.isAlive() {
             timerManager.stopTimer()
-//            guard let seconds = timerManager.getSeconds() else { return }
             showInputDialog { [weak self](note) in
                 guard let self = self else { return }
                 self.appendTimers(note: note)
                 self.updateTableView()
-//                let timer = TimerModel(seconds: seconds, note: note)
-//                if self.timers == nil {
-//                    self.timers = TimersModel(array: [timer], isActive: false, isRunning: false)
-//                } else {
-//                    self.timers?.array.insert(timer, at: 0)
-//                }
                 self.resetTimer()
             }
         }
@@ -102,7 +95,6 @@ extension MainViewController {
         if timerManager.isAlive() {
             appendTimers(isActive: true, isRunning: timerManager.isRunning())
         }
-        print(timers)
         timerManager.stopTimer()
         storeManager.saveTimers(timers)
     }
@@ -112,7 +104,6 @@ extension MainViewController {
         if timers != nil {
             if timers!.isActive {
                 guard let currentTimer = timers?.array.first else { return }
-                print(timers)
                 timerManager.startFrom(seconds: currentTimer.seconds, run: timers!.isRunning)
                 timers!.array.removeFirst()
                 self.timers = timers
